@@ -14,18 +14,21 @@
         state: latest
     
     - name: Check docker is active
+      become: true
       service:
         name: docker
         state: started
         enabled: yes
 
     - name: Ensure group "docker" exists
+      become: true
       group:
         name: docker
         state: present
 
     - name: adding ec2-user to docker group
+      become: true
       user:
-        name: ubuntu
+        name: ec2-user
         groups: docker
-        append: yes
+        append: no
