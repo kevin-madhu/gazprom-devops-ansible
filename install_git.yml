@@ -1,0 +1,14 @@
+---
+- hosts: all
+  remote_user: ec2-user
+  become_user: root
+  tasks:
+    - name: Ensure that software packages are up to date
+      yum:
+        name: '*'
+    
+    - name: Install Git
+      become: true
+      yum:
+        name: git
+        state: latest
