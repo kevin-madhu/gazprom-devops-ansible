@@ -1,0 +1,41 @@
+---
+- hosts: knodes
+  remote_user: ec2-user
+  become_user: root
+  tasks:
+    - import_tasks: install-docker.yml
+    
+    - name: Ensure that software packages are up to date
+      yum:
+        name: '*'
+
+    - name: Add the Kubernetes repo and key
+      become: true
+      yum_repository:
+        name: kubernetes
+        description: Kubernetes
+        baseurl: https://packages.cloud.google.com/yum/repos/kubernetes-el7-\$basearch
+        gpgcheck: yes
+        gpgkey: https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+
+    - name: Ensure that software packages are up to date and remove obsolete packages
+      yum:
+        name: '*'
+        state: latest
+    
+    - name: Install Kubectl
+      become: true
+      yum:
+        name: kubectl
+        state: latest
+
+    - name: Download minikube
+      get_url:
+        url: https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+    
+    - name: Install minikube
+      become: true
+      command: install minikube-linux-amd64 /usr/local/bin/minikube
+    
+    - name: Start minikube
+      command: minikube start
