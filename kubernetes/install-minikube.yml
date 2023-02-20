@@ -37,5 +37,5 @@
       command: install minikube-linux-amd64 /usr/local/bin/minikube
     
     - name: Start minikube
-      become_user: ec2-user
+      become: true
       command: minikube start --driver=docker
