@@ -28,7 +28,7 @@
 
     - name:  Add the user to docker group create that group
       become_method: sudo
-      command: usermod -aG docker $USER && newgrp docker
+      command: "usermod -aG docker ec2-user && newgrp docker"
     
     # - name: Adding ec2-user to docker group
     #   become: true
