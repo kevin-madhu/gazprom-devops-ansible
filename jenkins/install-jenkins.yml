@@ -6,6 +6,10 @@
     - name: Ensure that software packages are up to date
       yum:
         name: '*'
+
+    - name: Install Java
+      become: true
+      command: amazon-linux-extras install java-openjdk11 -y
     
     - name: Add the Jenkins repo and key
       become: true
@@ -20,10 +24,6 @@
       yum:
         name: '*'
         state: latest
-
-    - name: Install Java
-      become: true
-      command: amazon-linux-extras install java-openjdk11 -y
     
     - name: Install Jenkins
       become: true
