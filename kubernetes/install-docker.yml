@@ -20,15 +20,15 @@
         state: started
         enabled: yes
     
-    # - name: Ensure group "docker" exists
-    #   become: true
-    #   group:
-    #     name: docker
-    #     state: present
+    - name: Ensure group "docker" exists
+      ansible_become_method: sudo
+      group:
+        name: docker
+        state: present
 
     - name:  Add the user to docker group create that group
       become_method: sudo
-      command: "usermod -aG docker ec2-user && newgrp docker"
+      command: "usermod -aG docker ec2-user"
     
     # - name: Adding ec2-user to docker group
     #   become: true
