@@ -26,8 +26,8 @@
         name: docker
         state: present
 
-     - name:  Add the user to docker group create that group
-       command: sudo usermod -aG docker ec2-user
+    - name:  Add the user to docker group create that group
+      command: sudo usermod -aG docker ec2-user
     
     # - name: Adding ec2-user to docker group
     #   become: true
