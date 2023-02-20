@@ -21,7 +21,7 @@
         enabled: yes
     
     - name: Ensure group "docker" exists
-      brecome: true
+      become: true
       group:
         name: docker
         state: present
