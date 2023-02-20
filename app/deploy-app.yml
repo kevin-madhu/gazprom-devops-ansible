@@ -1,0 +1,13 @@
+---
+- hosts: knodes
+  remote_user: ec2-user
+  become_user: root
+  tasks:
+    - name: Clone kubernetes repo
+      command: git clone git@github.com:kevin-madhu/gazprom-devops-kub.git ~/gazprom-devops-kub 
+
+    - name: Create a deployment
+      command: kubectl create -f ~ec2-user/gazprom-devops-kub/*.yml
+    
+    - name: Update deployment with new image
+      command: kubectl rollout restart deployment app-deployment
