@@ -20,20 +20,19 @@
         state: started
         enabled: yes
     
-    # - name:  Add the user to docker group create that group
-    #   become: true
-    #   command: usermod -aG docker $USER && newgrp docker
-    
     - name: Ensure group "docker" exists
       become: true
       group:
         name: docker
         state: present
 
-    - name: Adding ec2-user to docker group
-      become: true
-      become_method: sudo
-      user:
-        name: $USER
-        groups: docker
-        append: yes
+     - name:  Add the user to docker group create that group
+       command: sudo usermod -aG docker ec2-user
+    
+    # - name: Adding ec2-user to docker group
+    #   become: true
+    #   become_method: sudo
+    #   user:
+    #     name: $USER
+    #     groups: docker
+    #     append: yes
