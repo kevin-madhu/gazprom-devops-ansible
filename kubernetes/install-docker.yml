@@ -21,7 +21,6 @@
         enabled: yes
     
     - name: Ensure group "docker" exists
-      ansible_become_method: sudo
       group:
         name: docker
         state: present
