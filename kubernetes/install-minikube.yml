@@ -37,5 +37,4 @@
       command: install minikube-linux-amd64 /usr/local/bin/minikube
     
     - name: Start minikube
-      become: true
       command: minikube start --driver=docker
