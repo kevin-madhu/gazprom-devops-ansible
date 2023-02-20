@@ -4,7 +4,8 @@
   become_user: root
   tasks:
     - name: Clone kubernetes repo
-      command: git clone git@github.com:kevin-madhu/gazprom-devops-kub.git ~/gazprom-devops-kub 
+      command: git clone git@github.com:kevin-madhu/gazprom-devops-kub.git ~/gazprom-devops-kub
+      ignore_errors: true
 
     - name: Create a deployment
       command: kubectl create -f ~ec2-user/gazprom-devops-kub/*.yml
