@@ -21,6 +21,7 @@
         gpgkey: https://pkg.jenkins.io/redhat-stable/jenkins.io.key
 
     - name: Ensure that software packages are up to date and remove obsolete packages
+      become: true
       yum:
         name: '*'
         state: latest
