@@ -27,6 +27,10 @@
           -s http://localhost:8080 -auth admin:{{ adminToken.stdout }}
           safe-restart
     
+    - name: Pause for 2 minutes for the server to come back up
+      pause:
+      minutes: 2
+
     - name: Copy credentials.xml for jenkins
       copy:
         src: /tmp/credentials.xml
