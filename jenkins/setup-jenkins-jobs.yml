@@ -37,11 +37,14 @@
         dest: /tmp/credentials.xml
         remote_src: no
     
+    #- name: Import jenkins credentials
+    #  command: |
+    #    java -jar ~ec2-user/jenkins-cli.jar
+    #      -s http://localhost:8080 -auth admin:{{ adminToken.stdout }}
+    #      import-credentials-as-xml system::system::jenkins < /tmp/credentials.xml
+    
     - name: Import jenkins credentials
-      command: |
-        java -jar ~ec2-user/jenkins-cli.jar
-          -s http://localhost:8080 -auth admin:{{ adminToken.stdout }}
-          import-credentials-as-xml system::system::jenkins < /tmp/credentials.xml
+      shell: java -jar ~ec2-user/jenkins-cli.jar -s http://localhost:8080 -auth admin:{{ adminToken.stdout }} import-credentials-as-xml system::system::jenkins < /tmp/credentials.xml
 
     - name: Copy gazprom-devops-pipeline.xml job for jenkins
       copy:
@@ -49,11 +52,21 @@
         dest: /tmp/gazprom-devops-pipeline.xml
         remote_src: no
 
+    #- name: Create jenkins jobs
+    #  command: |
+    #    java -jar ~ec2-user/jenkins-cli.jar
+    #      -s http://localhost:8080 -auth admin:{{ adminToken.stdout }}
+    #      create-job gazprom-devops-pipeline < /tmp/gazprom-devops-pipeline.xml
+    
     - name: Create jenkins jobs
-      command: |
-        java -jar ~ec2-user/jenkins-cli.jar
-          -s http://localhost:8080 -auth admin:{{ adminToken.stdout }}
-          create-job gazprom-devops-pipeline < /tmp/gazprom-devops-pipeline.xml
+      shell: java -jar ~ec2-user/jenkins-cli.jar -s http://localhost:8080 -auth admin:{{ adminToken.stdout }} create-job gazprom-devops-pipeline < /tmp/gazprom-devops-pipeline.xml
+
+    - name: Create a directory if it does not exist
+      file:
+        path: /var/lib/jenkins/.ssh
+        state: directory
+        mode: '0751'
+
 
     - name: Create ansible-server.properties
       become_user: jenkins
