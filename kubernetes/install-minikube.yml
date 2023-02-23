@@ -17,6 +17,7 @@
         gpgkey: https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 
     - name: Ensure that software packages are up to date and remove obsolete packages
+      become: true
       yum:
         name: '*'
         state: latest
