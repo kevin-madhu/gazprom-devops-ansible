@@ -84,3 +84,10 @@
         owner: jenkins
         group: jenkins
         mode: '0400'
+    
+    - name: Restart jenkins to reflect docker group permission
+      become: true
+      systemd:
+        name: jenkins
+        state: restarted
+        enabled: yes
