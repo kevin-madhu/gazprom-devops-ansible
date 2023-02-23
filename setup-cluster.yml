@@ -1,5 +1,7 @@
-- import_playbook: install-git.yml
-- import_playbook: install-docker.yml
+- import_playbook: common/install-git.yml
+- import_playbook: common/install-docker.yml
+
+- import_playbook: ansible-controller/setup-ansible-controller.yml
 
 - import_playbook: jenkins/setup-jenkins.yml
 

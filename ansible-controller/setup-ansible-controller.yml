@@ -1,0 +1,14 @@
+---
+- hosts: knodes
+  remote_user: ec2-user
+  become_user: root
+  tasks:
+    - name: Ensure that software packages are up to date
+      yum:
+        name: '*'
+    
+    - name: Install python-netaddr
+      become: true
+      yum:
+        name: python-netaddr
+        state: latest
