@@ -1,0 +1,60 @@
+---
+- hosts: jenkins
+  remote_user: ec2-user
+  become_user: root
+  tasks:
+    - name: Download Jenkins CLI
+      get_url:
+        url: http://localhost:8080/jnlpJars/jenkins-cli.jar
+        dest: ~ec2-user
+        mode: '0500'
+    
+    - name: Retrieve jenkins initialAdminPassword
+      become_user: jenkins
+      command: cat /var/lib/jenkins/secrets/initialAdminPassword
+      register: adminToken
+
+    - name: Install jenkins plugins
+      command: |
+        java -jar ~ec2-user/jenkins-cli.jar
+          -s http://localhost:8080 -auth admin:{{ adminToken.stdout }}
+          install-plugin git workflow-aggregator docker-workflow pipeline-utility-steps ssh-steps
+    
+    - name: Safe restart jenkins
+      command: |
+        java -jar ~ec2-user/jenkins-cli.jar
+          -s http://localhost:8080 -auth admin:{{ adminToken.stdout }}
+          safe-restart
+    
+    - name: Copy /tmp/jenkins dir containing jobs and credentials
+      copy:
+        src: /tmp/jenkins
+        dest: /tmp/jenkins
+        remote_src: no
+
+    - name: Import jenkins credentials
+      command: |
+        java -jar ~ec2-user/jenkins-cli.jar
+          -s http://localhost:8080 -auth admin:{{ adminToken.stdout }}
+          import-credentials-as-xml system::system::jenkins < /tmp/jenkins/credentials.xml
+
+    - name: Create jenkins jobs
+      command: |
+        java -jar ~ec2-user/jenkins-cli.jar
+          -s http://localhost:8080 -auth admin:{{ adminToken.stdout }}
+          create-job gazprom-devops-pipeline < /tmp/jenkins/jobs/gazprom-devops-pipeline.xml
+
+    - name: Create ansible-server.properties
+      become_user: jenkins
+      command: |
+        echo "PRIVATE_IP={{ ansible_all_ipv4_addresses | ipaddr('private') | first }}" >
+          /var/lib/jenkins/workspace/gazprom-devops-pipeline/ansible-server.properties
+
+    - name: Copy ssh key for jenkins to connect to ansible
+      become: true
+      copy:
+        src: ~ec2-user/.ssh/id_rsa
+        dest: /var/lib/jenkins/.ssh/id_rsa
+        owner: jenkins
+        group: jenkins
+        mode: '0400'

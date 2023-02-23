@@ -1,4 +1,8 @@
 - import_playbook: install-git.yml
-- import_playbook: jenkins/install-jenkins.yml
+- import_playbook: install-docker.yml
+
+- import_playbook: jenkins/setup-jenkins.yml
+
 - import_playbook: kubernetes/setup-kubernetes.yml
+
 - import_playbook: app/deploy-app.yml

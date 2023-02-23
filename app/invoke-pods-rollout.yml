@@ -1,0 +1,7 @@
+---
+- hosts: knodes
+  remote_user: ec2-user
+  become_user: root
+  tasks:    
+    - name: Update deployment with new image
+      command: kubectl rollout restart deployment app-deployment

@@ -9,6 +9,3 @@
 
     - name: Create a deployment
       command: kubectl create -f ~ec2-user/gazprom-devops-kub/*.yml
-    
-    - name: Update deployment with new image
-      command: kubectl rollout restart deployment app-deployment
