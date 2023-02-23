@@ -62,17 +62,18 @@
       shell: java -jar ~ec2-user/jenkins-cli.jar -s http://localhost:8080 -auth admin:{{ adminToken.stdout }} create-job gazprom-devops-pipeline < /tmp/gazprom-devops-pipeline.xml
 
     - name: Create a directory if it does not exist
+      become_user: jenkins
+      become: true
       file:
         path: /var/lib/jenkins/.ssh
         state: directory
+        owner: jenkins
+        group: jenkins
         mode: '0751'
-
 
     - name: Create ansible-server.properties
       become_user: jenkins
-      command: |
-        echo "PRIVATE_IP={{ ansible_all_ipv4_addresses | ipaddr('private') | first }}" >
-          /var/lib/jenkins/workspace/gazprom-devops-pipeline/ansible-server.properties
+      shell: echo "PRIVATE_IP={{ ansible_env['SSH_CLIENT'].split() | first }}" > /var/lib/jenkins/jobs/gazprom-devops-pipeline/ansible-server.properties
 
     - name: Copy ssh key for jenkins to connect to ansible
       become: true
