@@ -26,23 +26,29 @@
           -s http://localhost:8080 -auth admin:{{ adminToken.stdout }}
           safe-restart
     
-    - name: Copy /tmp/jenkins dir containing jobs and credentials
+    - name: Copy credentials.xml for jenkins
       copy:
-        src: /tmp/jenkins
-        dest: /tmp/jenkins
+        src: /tmp/credentials.xml
+        dest: /tmp/credentials.xml
         remote_src: no
-
+    
     - name: Import jenkins credentials
       command: |
         java -jar ~ec2-user/jenkins-cli.jar
           -s http://localhost:8080 -auth admin:{{ adminToken.stdout }}
-          import-credentials-as-xml system::system::jenkins < /tmp/jenkins/credentials.xml
+          import-credentials-as-xml system::system::jenkins < /tmp/credentials.xml
+
+    - name: Copy gazprom-devops-pipeline.xml job for jenkins
+      copy:
+        src: /tmp/gazprom-devops-pipeline.xml
+        dest: /tmp/gazprom-devops-pipeline.xml
+        remote_src: no
 
     - name: Create jenkins jobs
       command: |
         java -jar ~ec2-user/jenkins-cli.jar
           -s http://localhost:8080 -auth admin:{{ adminToken.stdout }}
-          create-job gazprom-devops-pipeline < /tmp/jenkins/jobs/gazprom-devops-pipeline.xml
+          create-job gazprom-devops-pipeline < /tmp/gazprom-devops-pipeline.xml
 
     - name: Create ansible-server.properties
       become_user: jenkins
