@@ -85,6 +85,19 @@
         group: jenkins
         mode: '0400'
     
+    - name: Ensure group "docker" exists
+      become: true
+      group:
+        name: docker
+        state: present
+
+    - name: Adding jenkins user to docker group
+      become: true
+      user:
+        name: jenkins
+        groups: docker
+        append: yes
+    
     - name: Restart jenkins to reflect docker group permission
       become: true
       systemd:
