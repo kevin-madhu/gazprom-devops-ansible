@@ -11,6 +11,7 @@
     
     - name: Retrieve jenkins initialAdminPassword
       become_user: jenkins
+      become: true
       command: cat /var/lib/jenkins/secrets/initialAdminPassword
       register: adminToken
 
