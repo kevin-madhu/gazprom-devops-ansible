@@ -73,6 +73,7 @@
 
     - name: Create ansible-server.properties
       become_user: jenkins
+      become: true
       shell: echo "PRIVATE_IP={{ ansible_env['SSH_CLIENT'].split() | first }}" > /var/lib/jenkins/jobs/gazprom-devops-pipeline/ansible-server.properties
 
     - name: Copy ssh key for jenkins to connect to ansible
