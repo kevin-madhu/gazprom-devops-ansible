@@ -29,7 +29,7 @@
     
     - name: Pause for 2 minutes for the server to come back up
       pause:
-      minutes: 2
+        minutes: 2
 
     - name: Copy credentials.xml for jenkins
       copy:
