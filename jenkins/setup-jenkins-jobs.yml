@@ -6,7 +6,7 @@
     - name: Download Jenkins CLI
       get_url:
         url: http://localhost:8080/jnlpJars/jenkins-cli.jar
-        dest: ~ec2-user
+        dest: ~ec2-user/jenkins-cli.jar
         mode: '0500'
     
     - name: Retrieve jenkins initialAdminPassword
